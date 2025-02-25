@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autenticación - Leones Calistenia</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <img src="/resources/logo.png" alt="Logo" class="logo_image">
+            <div class="logo">Leones Calistenia</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="classes.html">Clases</a></li>
+                <li><a href="profile.html">Mi Perfil</a></li>
+                <li><a href="auth.html" class="active">Iniciar Sesión</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section class="auth-container">
+            <h1>Iniciar Sesión</h1>
+            <form id="login-form">
+                <input type="email" id="email" placeholder="Correo Electrónico" required>
+                <input type="password" id="password" placeholder="Contraseña" required>
+                <button type="submit">Ingresar</button>
+            </form>
+            <p>¿No tienes una cuenta? <a href="#" id="show-register">Regístrate aquí</a></p>
+        </section>
+        <section class="auth-container hidden" id="register-section">
+            <h1>Registro</h1>
+            <form id="register-form">
+                <input type="text" id="first_name" placeholder="Nombre" required>
+                <input type="text" id="last_name" placeholder="Apellido" required>
+                <input type="email" id="register-email" placeholder="Correo Electrónico" required>
+                <input type="password" id="register-password" placeholder="Contraseña" required>
+                <select id="role">
+                    <option value="member">Miembro</option>
+                    <option value="coach">Coach</option>
+                </select>
+                <button type="submit">Registrarse</button>
+            </form>
+            <p>¿Ya tienes una cuenta? <a href="#" id="show-login">Inicia sesión aquí</a></p>
+        </section>
+    </main>
+    <script src="js/auth.js"></script>
+    <footer>
+        <p>&copy; 2025 Leones Calistenia. Todos los derechos reservados.</p>
+    </footer>
+</body>
+</html>

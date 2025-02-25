@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perfil - Leones Calistenia</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <img src="/resources/logo.png" alt="Logo" class="logo_image">
+            <div class="logo">Leones Calistenia</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="classes.html">Clases</a></li>
+                <li><a href="profile.html" class="active">Mi Perfil</a></li>
+                <li><a href="auth.html">Iniciar Sesión</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section class="profile-info">
+            <h2>Mi Perfil</h2>
+            <div id="user-info">
+                <!-- Datos del usuario se llenarán dinámicamente -->
+            </div>
+
+            <!-- Botón para eliminar cuenta con advertencia -->
+            <button id="delete-account" class="delete-btn">Eliminar Cuenta</button>
+        </section>
+        <section class="packages">
+            <h2>Mis Paquetes de Clases</h2>
+            <div id="packages-container">
+                <!-- Paquetes cargados dinámicamente con JS -->
+            </div>
+        </section>
+    </main>
+    <script src="js/profile.js"></script>
+    <footer>
+        <p>&copy; 2025 Leones Calistenia. Todos los derechos reservados.</p>
+    </footer>
+</body>
+</html>
