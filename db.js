@@ -6,7 +6,7 @@ const pool = mysql.createPool({
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
     socketPath: `/cloudsql/${process.env.DB_HOST}`, // Cloud SQL Connection
-    connectionLimit: 10
+    connectionLimit: 50
   });
 
 module.exports = pool;
