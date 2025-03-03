@@ -41,4 +41,18 @@ router.put('/profile', authenticate, authorize(['member', 'coach']), async (req,
     }
 });
 
+router.delete('/delete', authenticate, async (req, res) => {
+    const userId = req.user.id;
+
+    try {
+        // Delete user from `users` table (it will cascade to `members` and other related tables)
+        await db.query('DELETE FROM users WHERE id = ?', [userId]);
+
+        res.json({ message: 'Cuenta eliminada correctamente.' });
+    } catch (error) {
+        res.status(500).json({ error: 'Error al eliminar la cuenta.' });
+    }
+});
+
+
 module.exports = router;

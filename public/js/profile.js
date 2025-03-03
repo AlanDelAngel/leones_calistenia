@@ -30,19 +30,26 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Fetch user packages
     try {
-        const response = await fetch('/packages/active', {
+        const response = await fetch('/packages/my-packages', {
             headers: { 'Authorization': `Bearer ${token}` }
         });
 
         if (response.ok) {
-            const activePackage = await response.json();
-            packagesContainer.innerHTML = `
-                <p><strong>Paquete Activo:</strong> ${activePackage.package_type} clases</p>
-                <p><strong>Clases Restantes:</strong> ${activePackage.remaining_classes}</p>
-                <p><strong>Expira el:</strong> ${activePackage.expiration_date}</p>
-            `;
+            const packages = await response.json();
+            if (packages.length > 0) {
+                packagesContainer.innerHTML = packages.map(pkg => `
+                    <div class="package-item">
+                        <p><strong>Paquete:</strong> ${pkg.package_type} clases</p>
+                        <p><strong>Clases Restantes:</strong> ${pkg.remaining_classes}</p>
+                        <p><strong>Fecha de Compra:</strong> ${pkg.purchase_date}</p>
+                        <p><strong>Expira el:</strong> ${pkg.expiration_date}</p>
+                    </div>
+                `).join('');
+            } else {
+                packagesContainer.innerHTML = '<p>No tienes paquetes activos.</p>';
+            }
         } else {
-            packagesContainer.innerHTML = '<p>No tienes paquetes activos.</p>';
+            packagesContainer.innerHTML = '<p>Error al obtener los paquetes.</p>';
         }
     } catch (error) {
         console.error('Error al obtener paquetes:', error);
@@ -75,5 +82,47 @@ document.getElementById("delete-account")?.addEventListener("click", async () =>
 
     } catch (error) {
         alert("Error al eliminar la cuenta: " + error.message);
+    }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const purchaseButton = document.getElementById('purchase-package');
+    const packageSelect = document.getElementById('package-selection');
+    const purchaseStatus = document.getElementById('purchase-status');
+    const token = localStorage.getItem('token');
+
+    if (purchaseButton) {
+        purchaseButton.addEventListener('click', async () => {
+            const packageType = packageSelect.value;
+
+            if (!token) {
+                alert('Por favor, inicia sesión para comprar un paquete.');
+                return;
+            }
+
+            try {
+                const response = await fetch('/packages/purchase', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ package_type: packageType })
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    purchaseStatus.innerText = 'Compra exitosa!';
+                    purchaseStatus.style.color = 'green';
+                } else {
+                    purchaseStatus.innerText = `Error: ${data.error}`;
+                    purchaseStatus.style.color = 'red';
+                }
+            } catch (error) {
+                console.error('Error al comprar paquete:', error);
+                purchaseStatus.innerText = 'Error al procesar la compra.';
+                purchaseStatus.style.color = 'red';
+            }
+        });
     }
 });
