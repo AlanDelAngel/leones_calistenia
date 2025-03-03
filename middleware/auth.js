@@ -1,22 +1,26 @@
-require('dotenv').config();
 const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
+// Middleware to authenticate users
 const authenticate = (req, res, next) => {
-    const token = req.header('Authorization');
-    if (!token) return res.status(401).json({ error: 'Acceso denegado. No hay token.' });
+    const token = req.headers.authorization?.split(" ")[1];
+    if (!token) return res.status(401).json({ error: "Unauthorized: No token provided" });
 
-    try {
-        const tokenParts = token.split(' ');
-        if (tokenParts.length !== 2 || tokenParts[0] !== 'Bearer') {
-            return res.status(400).json({ error: 'Formato de token inválido.' });
-        }
-
-        const decoded = jwt.verify(tokenParts[1], process.env.JWT_SECRET);
-        req.user = decoded;
+    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+        if (err) return res.status(403).json({ error: "Forbidden: Invalid token" });
+        req.user = user;
         next();
-    } catch (error) {
-        res.status(400).json({ error: 'Token inválido.' });
-    }
+    });
 };
 
-module.exports = authenticate;
+// Middleware to enforce role-based access
+const authorize = (roles) => {
+    return (req, res, next) => {
+        if (!roles.includes(req.user.role)) {
+            return res.status(403).json({ error: "Forbidden: Insufficient permissions" });
+        }
+        next();
+    };
+};
+
+module.exports = { authenticate, authorize };

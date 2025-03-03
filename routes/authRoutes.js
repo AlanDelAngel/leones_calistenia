@@ -3,8 +3,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { body, validationResult } = require('express-validator');
 const db = require('../db');
-
-const router = express.Router();
+const authenticate = require('../middleware/auth');
 
 router.post('/register', async (req, res) => {
     const { first_name, last_name, email, password, role } = req.body;
@@ -54,5 +53,35 @@ router.post('/login', async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 });
+
+module.exports = router;
+
+
+const router = express.Router();
+const BLACKLISTED_TOKENS = new Set(); // Temporary in-memory blacklist
+
+// Logout route: Add token to blacklist
+router.post('/logout', authenticate, (req, res) => {
+    const token = req.headers.authorization?.split(" ")[1];
+
+    if (!token) {
+        return res.status(400).json({ error: "Token missing" });
+    }
+
+    BLACKLISTED_TOKENS.add(token);
+    res.json({ message: "Logged out successfully" });
+});
+
+// Middleware to check if token is blacklisted
+const checkBlacklist = (req, res, next) => {
+    const token = req.headers.authorization?.split(" ")[1];
+    if (BLACKLISTED_TOKENS.has(token)) {
+        return res.status(401).json({ error: "Token is invalid, please login again" });
+    }
+    next();
+};
+
+// Apply blacklist check to all routes
+router.use(checkBlacklist);
 
 module.exports = router;
