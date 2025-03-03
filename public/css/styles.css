@@ -103,6 +103,10 @@ main {
     border-radius: 5px;
 }
 
+#logout-button{
+    background-color: #434343;
+}
+
 /* Sección de clases */
 .class-list, .profile-info, .auth-container {
     padding: 40px 20px;
@@ -157,34 +161,70 @@ footer {
 .class-calendar {
     text-align: center;
     margin: 20px auto;
-    max-width: 600px;
+    max-width: 700px;
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 #calendar-controls {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
 }
 
-#calendar-grid {
+.calendar-header {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    background-color: #ddd;
+    text-align: center;
+    font-weight: bold;
+    padding: 10px 0;
+    border-bottom: 2px solid #bbb;
+    margin-bottom: 5px;
+}
+
+.calendar-day-header {
+    padding: 10px;
+    font-size: 14px;
+}
+
+.calendar-days {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     gap: 5px;
+    background-color: white;
 }
 
 .calendar-day, .empty {
-    padding: 10px;
+    padding: 12px;
     border: 1px solid #ddd;
     text-align: center;
     font-size: 14px;
+    min-height: 50px;
 }
 
 .calendar-day.has-class {
     background-color: #ffcc00;
     cursor: pointer;
+    font-weight: bold;
 }
 
 .calendar-day.has-class:hover {
     background-color: #ffaa00;
+}
+
+@media (max-width: 768px) {
+    .class-calendar {
+        max-width: 90%;
+    }
+    .calendar-header {
+        font-size: 12px;
+    }
+    .calendar-day, .empty {
+        font-size: 12px;
+        padding: 8px;
+    }
 }
