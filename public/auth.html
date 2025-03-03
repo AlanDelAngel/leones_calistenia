@@ -23,8 +23,8 @@
         <section class="auth-container">
             <h1>Iniciar Sesión</h1>
             <form id="login-form">
-                <input type="email" id="email" placeholder="Correo Electrónico" required>
-                <input type="password" id="password" placeholder="Contraseña" required>
+                <input type="email" id="login-email" placeholder="Correo Electrónico" required>
+                <input type="password" id="login-password" placeholder="Contraseña" required>
                 <button type="submit">Ingresar</button>
             </form>
             <p>¿No tienes una cuenta? <a href="#" id="show-register">Regístrate aquí</a></p>
@@ -32,11 +32,11 @@
         <section class="auth-container hidden" id="register-section">
             <h1>Registro</h1>
             <form id="register-form">
-                <input type="text" id="first_name" placeholder="Nombre" required>
-                <input type="text" id="last_name" placeholder="Apellido" required>
+                <input type="text" id="register-firstname" placeholder="Nombre" required>
+                <input type="text" id="register-lastname" placeholder="Apellido" required>
                 <input type="email" id="register-email" placeholder="Correo Electrónico" required>
                 <input type="password" id="register-password" placeholder="Contraseña" required>
-                <select id="role">
+                <select id="register-role">
                     <option value="member">Miembro</option>
                     <option value="coach">Coach</option>
                 </select>
@@ -45,7 +45,7 @@
             <p>¿Ya tienes una cuenta? <a href="#" id="show-login">Inicia sesión aquí</a></p>
         </section>
     </main>
-    <script src="js/auth.js"></script>
+    <script src="js/auth.js" defer></script>
     <footer>
         <p>&copy; 2025 Leones Calistenia. Todos los derechos reservados.</p>
     </footer>

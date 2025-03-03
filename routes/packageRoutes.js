@@ -1,34 +1,52 @@
 const express = require('express');
 const db = require('../db');
-const authenticate = require('../middleware/auth');
+const { authenticate, authorize } = require('../middleware/auth');
 
 const router = express.Router();
 
-// Comprar un paquete de clases
-router.post('/', authenticate, async (req, res) => {
-    if (req.user.role !== 'member') return res.status(403).json({ error: 'Solo los miembros pueden comprar paquetes' });
-
+// Purchase a class package (Members Only)
+router.post('/', authenticate, authorize(['member']), async (req, res) => {
+    const memberId = req.user.id;
     const { package_type } = req.body;
-    const expirationDate = new Date();
-    expirationDate.setFullYear(expirationDate.getFullYear() + 1);
+
+    const packageDays = {
+        '2': 2,
+        '7': 7,
+        '30': 30,
+        '60': 60
+    };
+
+    if (!packageDays[package_type]) {
+        return res.status(400).json({ error: 'Invalid package type' });
+    }
 
     try {
-        const [result] = await db.query('INSERT INTO class_packages (member_id, package_type, remaining_classes, purchase_date, expiration_date) VALUES (?, ?, ?, NOW(), ?)', 
-        [req.user.id, package_type, package_type, expirationDate]);
+        const expirationDate = new Date();
+        expirationDate.setDate(expirationDate.getDate() + packageDays[package_type]);
 
-        res.json({ success: true, package_id: result.insertId });
+        await db.query(
+            'INSERT INTO class_packages (member_id, package_type, remaining_classes, purchase_date, expiration_date) VALUES (?, ?, ?, CURDATE(), ?)',
+            [memberId, package_type, package_type, expirationDate]
+        );
+
+        res.json({ message: 'Package purchased successfully' });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 });
 
-// Ver paquetes comprados por el usuario
-router.get('/', authenticate, async (req, res) => {
-    if (req.user.role !== 'member') return res.status(403).json({ error: 'Solo los miembros pueden ver paquetes' });
-
+// Get member's active package
+router.get('/active', authenticate, authorize(['member']), async (req, res) => {
     try {
-        const [packages] = await db.query('SELECT * FROM class_packages WHERE member_id = ?', [req.user.id]);
-        res.json(packages);
+        const [activePackage] = await db.query(
+            'SELECT * FROM class_packages WHERE member_id = ? AND remaining_classes > 0 AND expiration_date >= CURDATE() ORDER BY expiration_date ASC LIMIT 1',
+            [req.user.id]
+        );
+
+        if (!activePackage.length) {
+            return res.status(404).json({ error: 'No active package found' });
+        }
+        res.json(activePackage[0]);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

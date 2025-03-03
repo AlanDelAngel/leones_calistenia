@@ -1,73 +1,51 @@
-document.addEventListener("DOMContentLoaded", async () => {
-    const token = localStorage.getItem("token");
+document.addEventListener('DOMContentLoaded', async () => {
+    const token = localStorage.getItem('token');
     if (!token) {
-        window.location.href = "auth.html"; // Redirige si no hay sesión activa
+        alert('Por favor, inicia sesión primero.');
+        window.location.href = '/auth.html';
         return;
     }
 
+    const userInfoDiv = document.getElementById('user-info');
+    const packagesContainer = document.getElementById('packages-container');
+
+    // Fetch user profile
     try {
-        // Solicitar datos del usuario
-        const response = await fetch("/users/me", {
-            headers: { "Authorization": `Bearer ${token}` }
+        const response = await fetch('/users/profile', {
+            headers: { 'Authorization': `Bearer ${token}` }
         });
 
-        const data = await response.json();
+        if (!response.ok) throw new Error('No se pudo obtener el perfil');
 
-        if (!response.ok) {
-            throw new Error(data.error || "Error desconocido");
-        }
-
-        // Mostrar datos en el perfil
-        document.getElementById("user-info").innerHTML = `
-            <h2>${data.first_name} ${data.last_name}</h2>
-            <p>Email: ${data.email}</p>
+        const user = await response.json();
+        userInfoDiv.innerHTML = `
+            <p><strong>Nombre:</strong> ${user.first_name} ${user.last_name}</p>
+            <p><strong>Correo:</strong> ${user.email}</p>
+            <p><strong>Rol:</strong> ${user.role}</p>
         `;
-
-        // Obtener paquetes de clases
-        const packageResponse = await fetch("/packages", {
-            headers: { "Authorization": `Bearer ${token}` }
-        });
-
-        const packages = await packageResponse.json();
-        const packageContainer = document.getElementById("packages-container");
-        packageContainer.innerHTML = "";
-
-        packages.forEach(pkg => {
-            const div = document.createElement("div");
-            div.classList.add("package-item");
-            div.innerHTML = `<p>Paquete: ${pkg.package_type} clases - Restantes: ${pkg.remaining_classes}</p>`;
-            packageContainer.appendChild(div);
-        });
-
     } catch (error) {
-        alert("Error al cargar perfil: " + error.message);
+        console.error('Error al cargar el perfil:', error);
+        userInfoDiv.innerHTML = '<p>Error al cargar los datos del perfil.</p>';
     }
-});
 
-// Manejar eliminación de cuenta
-document.getElementById("delete-account")?.addEventListener("click", async () => {
-    const confirmDelete = confirm("⚠️ ¿Estás seguro de que quieres eliminar tu cuenta? Esta acción no se puede deshacer.");
-    if (!confirmDelete) return;
-
-    const token = localStorage.getItem("token");
-
+    // Fetch user packages
     try {
-        const response = await fetch("/users/delete", {
-            method: "DELETE",
-            headers: { "Authorization": `Bearer ${token}` }
+        const response = await fetch('/packages/active', {
+            headers: { 'Authorization': `Bearer ${token}` }
         });
 
-        const data = await response.json();
-
-        if (!response.ok) {
-            throw new Error(data.error || "No se pudo eliminar la cuenta.");
+        if (response.ok) {
+            const activePackage = await response.json();
+            packagesContainer.innerHTML = `
+                <p><strong>Paquete Activo:</strong> ${activePackage.package_type} clases</p>
+                <p><strong>Clases Restantes:</strong> ${activePackage.remaining_classes}</p>
+                <p><strong>Expira el:</strong> ${activePackage.expiration_date}</p>
+            `;
+        } else {
+            packagesContainer.innerHTML = '<p>No tienes paquetes activos.</p>';
         }
-
-        alert("Tu cuenta ha sido eliminada.");
-        localStorage.removeItem("token");
-        window.location.href = "auth.html";
-
     } catch (error) {
-        alert("Error al eliminar la cuenta: " + error.message);
+        console.error('Error al obtener paquetes:', error);
+        packagesContainer.innerHTML = '<p>Error al cargar los paquetes.</p>';
     }
 });

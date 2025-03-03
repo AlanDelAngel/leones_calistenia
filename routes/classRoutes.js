@@ -1,6 +1,6 @@
 const express = require('express');
 const db = require('../db');
-const authenticate = require('../middleware/auth');
+const { authenticate, authorize } = require('../middleware/auth');
 
 const router = express.Router();
 
@@ -15,7 +15,7 @@ router.get('/', async (req, res) => {
 });
 
 // Crear nueva clase (solo Manager)
-router.post('/', authenticate, async (req, res) => {
+router.post('/', authenticate, authorize(['manager']), async (req, res) => {
     if (req.user.role !== 'manager') return res.status(403).json({ error: 'Acceso denegado' });
 
     const { coach_id, class_date, max_capacity } = req.body;
@@ -29,7 +29,7 @@ router.post('/', authenticate, async (req, res) => {
 });
 
 // Actualizar clase (solo Manager)
-router.put('/:id', authenticate, async (req, res) => {
+router.put('/:id', authenticate, authorize(['manager']), async (req, res) => {
     if (req.user.role !== 'manager') return res.status(403).json({ error: 'Acceso denegado' });
 
     const { coach_id, class_date, max_capacity } = req.body;
@@ -43,7 +43,7 @@ router.put('/:id', authenticate, async (req, res) => {
 });
 
 // Eliminar clase (solo Manager, solo si no tiene inscripciones)
-router.delete('/:id', authenticate, async (req, res) => {
+router.delete('/:id', authenticate, authorize(['manager']), async (req, res) => {
     if (req.user.role !== 'manager') return res.status(403).json({ error: 'Acceso denegado' });
 
     try {

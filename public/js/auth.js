@@ -1,50 +1,68 @@
-document.getElementById("login-form")?.addEventListener("submit", async (event) => {
-    event.preventDefault();
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
+document.addEventListener('DOMContentLoaded', () => {
+    const loginForm = document.getElementById('login-form');
+    const registerForm = document.getElementById('register-form');
 
-    const response = await fetch("/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password })
-    });
+    if (loginForm) {
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const emailInput = document.getElementById('login-email');
+            const passwordInput = document.getElementById('login-password');
 
-    const data = await response.json();
-    
-    if (data.success) {
-        localStorage.setItem("token", data.token);
-        window.location.href = "profile.html";
-    } else {
-        alert("Error en la autenticación");
-    }
-});
+            if (!emailInput || !passwordInput) {
+                console.error("Login form elements not found");
+                return;
+            }
 
-document.getElementById("register-form")?.addEventListener("submit", async (event) => {
-    event.preventDefault();
+            const email = emailInput.value;
+            const password = passwordInput.value;
 
-    const first_name = document.getElementById("first_name").value;
-    const last_name = document.getElementById("last_name").value;
-    const email = document.getElementById("register-email").value;
-    const password = document.getElementById("register-password").value;
-    const role = document.getElementById("role").value;
+            const response = await fetch('/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
 
-    try {
-        const response = await fetch("/auth/register", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ first_name, last_name, email, password, role })
+            const data = await response.json();
+            if (response.ok) {
+                localStorage.setItem('token', data.token);
+                window.location.href = '/profile.html';
+            } else {
+                alert(data.error);
+            }
         });
+    }
 
-        const data = await response.json();
+    if (registerForm) {
+        registerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const firstNameInput = document.getElementById('register-firstname');
+            const lastNameInput = document.getElementById('register-lastname');
+            const emailInput = document.getElementById('register-email');
+            const passwordInput = document.getElementById('register-password');
 
-        if (!response.ok) {
-            throw new Error(data.error || "Error desconocido en el registro");
-        }
+            if (!firstNameInput || !lastNameInput || !emailInput || !passwordInput) {
+                console.error("Registration form elements not found");
+                return;
+            }
 
-        alert("Registro exitoso. Ahora puedes iniciar sesión.");
-        window.location.href = "auth.html";
+            const first_name = firstNameInput.value;
+            const last_name = lastNameInput.value;
+            const email = emailInput.value;
+            const password = passwordInput.value;
 
-    } catch (error) {
-        alert("Error en el registro: " + error.message);
+            const response = await fetch('/auth/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ first_name, last_name, email, password, role: 'member' })
+            });
+
+            const data = await response.json();
+            if (response.ok) {
+                alert('Registration successful! Please login.');
+                window.location.href = '/auth.html';
+            } else {
+                alert(data.error);
+            }
+        });
     }
 });
