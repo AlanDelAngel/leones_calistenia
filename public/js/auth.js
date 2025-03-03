@@ -1,6 +1,15 @@
 document.addEventListener('DOMContentLoaded', () => {
     const loginForm = document.getElementById('login-form');
     const registerForm = document.getElementById('register-form');
+    const logoutButton = document.getElementById('logout-button');
+
+    // Logout functionality
+    if (logoutButton) {
+        logoutButton.addEventListener('click', () => {
+            localStorage.removeItem('token');
+            window.location.href = '/auth.html';
+        });
+    }
 
     if (loginForm) {
         loginForm.addEventListener('submit', async (e) => {
@@ -8,18 +17,15 @@ document.addEventListener('DOMContentLoaded', () => {
             const emailInput = document.getElementById('login-email');
             const passwordInput = document.getElementById('login-password');
 
-            if (!emailInput || !passwordInput) {
-                console.error("Login form elements not found");
+            if (!emailInput.value || !passwordInput.value) {
+                alert('Por favor, complete todos los campos.');
                 return;
             }
-
-            const email = emailInput.value;
-            const password = passwordInput.value;
 
             const response = await fetch('/auth/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password })
+                body: JSON.stringify({ email: emailInput.value, password: passwordInput.value })
             });
 
             const data = await response.json();
@@ -40,25 +46,26 @@ document.addEventListener('DOMContentLoaded', () => {
             const emailInput = document.getElementById('register-email');
             const passwordInput = document.getElementById('register-password');
 
-            if (!firstNameInput || !lastNameInput || !emailInput || !passwordInput) {
-                console.error("Registration form elements not found");
+            if (!firstNameInput.value || !lastNameInput.value || !emailInput.value || !passwordInput.value) {
+                alert('Por favor, complete todos los campos.');
                 return;
             }
-
-            const first_name = firstNameInput.value;
-            const last_name = lastNameInput.value;
-            const email = emailInput.value;
-            const password = passwordInput.value;
 
             const response = await fetch('/auth/register', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ first_name, last_name, email, password, role: 'member' })
+                body: JSON.stringify({
+                    first_name: firstNameInput.value,
+                    last_name: lastNameInput.value,
+                    email: emailInput.value,
+                    password: passwordInput.value,
+                    role: 'member'
+                })
             });
 
             const data = await response.json();
             if (response.ok) {
-                alert('Registration successful! Please login.');
+                alert('Registro exitoso! Ahora puedes iniciar sesión.');
                 window.location.href = '/auth.html';
             } else {
                 alert(data.error);

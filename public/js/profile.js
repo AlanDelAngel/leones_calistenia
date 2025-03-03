@@ -49,3 +49,31 @@ document.addEventListener('DOMContentLoaded', async () => {
         packagesContainer.innerHTML = '<p>Error al cargar los paquetes.</p>';
     }
 });
+
+// Manejar eliminación de cuenta
+document.getElementById("delete-account")?.addEventListener("click", async () => {
+    const confirmDelete = confirm("⚠️ ¿Estás seguro de que quieres eliminar tu cuenta? Esta acción no se puede deshacer.");
+    if (!confirmDelete) return;
+
+    const token = localStorage.getItem("token");
+
+    try {
+        const response = await fetch("/users/delete", {
+            method: "DELETE",
+            headers: { "Authorization": `Bearer ${token}` }
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || "No se pudo eliminar la cuenta.");
+        }
+
+        alert("Tu cuenta ha sido eliminada.");
+        localStorage.removeItem("token");
+        window.location.href = "auth.html";
+
+    } catch (error) {
+        alert("Error al eliminar la cuenta: " + error.message);
+    }
+});

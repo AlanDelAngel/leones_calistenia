@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clases - Leones Calistenia</title>
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.11.3/main.min.css">
 </head>
 <body>
     <header>
@@ -20,14 +21,22 @@
         </nav>
     </header>
     <main>
-        <section class="class-list">
-            <h1>Nuestras Clases</h1>
-            <div id="classes-container">
-                <!-- Aqui se cargan las clases dinamicamente con JS -->
+        <section class="class-calendar">
+            <h1>Calendario de Clases</h1>
+            <div id="calendar-controls">
+                <button id="prev-month">← Anterior</button>
+                <h2 id="calendar-month"></h2>
+                <button id="next-month">Siguiente →</button>
             </div>
-        </section>
+            <div id="calendar-grid"></div>
+        </section>      
     </main>
+
+    <!-- Ensure FullCalendar is loaded before classes.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.11.3/main.min.js"></script>
     <script src="js/classes.js" defer></script>
+    <script src="js/main.js" defer></script>
+
     <footer>
         <p>&copy; 2025 Leones Calistenia. Todos los derechos reservados.</p>
     </footer>

@@ -3,6 +3,7 @@ const express = require ('express');
 const cors = require('cors');
 const path = require('path');
 const app = express();
+const errorHandler = require('./utils/errorHandler');
 app.use(express.json());
 app.use(cors());
 
@@ -15,6 +16,9 @@ app.use('/auth', authRoutes);
 
 //allow public folder to be used
 app.use(express.static(path.join(__dirname + '/public')));
+
+// Global Error Handler
+app.use(errorHandler);
 
 app.listen(8080, () => {
     console.log("Webpage running in http://localhost:8080/")

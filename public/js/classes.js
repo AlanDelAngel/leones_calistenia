@@ -1,55 +1,75 @@
-document.addEventListener('DOMContentLoaded', async () => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-        alert('Por favor, inicia sesión primero.');
-        window.location.href = '/auth.html';
-        return;
-    }
+document.addEventListener("DOMContentLoaded", () => {
+    const calendarGrid = document.getElementById("calendar-grid");
+    const calendarMonth = document.getElementById("calendar-month");
+    const prevMonthBtn = document.getElementById("prev-month");
+    const nextMonthBtn = document.getElementById("next-month");
 
-    const classList = document.getElementById('classes-container');
-    if (!classList) return;
+    let currentMonth = new Date().getMonth();
+    let currentYear = new Date().getFullYear();
 
-    try {
-        const response = await fetch('/classes', {
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
-        const classes = await response.json();
+    // Sample data for visualization (replace with API data)
+    const sampleClasses = [
+        { id: 1, date: "2025-04-05", title: "Calistenia Básica" },
+        { id: 2, date: "2025-04-10", title: "Entrenamiento Avanzado" },
+        { id: 3, date: "2025-04-15", title: "Flexibilidad y Movilidad" },
+        { id: 4, date: "2025-04-20", title: "Rutina Full Body" },
+        { id: 5, date: "2025-04-25", title: "Ejercicios de Resistencia" },
+    ];
 
-        if (response.ok) {
-            classList.innerHTML = classes.map(cls => `
-                <div class="class-item">
-                    <h3>${cls.class_type} - ${new Date(cls.class_date).toLocaleString()}</h3>
-                    <p><strong>Coach:</strong> ${cls.coach_id || 'TBA'}</p>
-                    <p><strong>Capacidad Máxima:</strong> ${cls.max_capacity}</p>
-                    <p><strong>Ubicación:</strong> ${cls.branch_id || 'No especificado'}</p>
-                    <button onclick="enroll(${cls.id})">Inscribirse</button>
-                </div>
-            `).join('');
-        } else {
-            classList.innerHTML = '<p>No hay clases disponibles.</p>';
+    function loadCalendar() {
+        calendarGrid.innerHTML = "";
+        const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+        const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+        calendarMonth.innerText = `${new Date(currentYear, currentMonth).toLocaleString("es-ES", { month: "long", year: "numeric" })}`;
+
+        for (let i = 0; i < firstDay; i++) {
+            const emptyCell = document.createElement("div");
+            emptyCell.classList.add("empty");
+            calendarGrid.appendChild(emptyCell);
         }
-    } catch (error) {
-        console.error('Error al cargar las clases:', error);
-        classList.innerHTML = '<p>Error al cargar las clases.</p>';
-    }
-});
 
-async function enroll(classId) {
-    const token = localStorage.getItem('token');
-    if (!token) {
-        alert('Necesitas iniciar sesión para inscribirte.');
-        return;
+        for (let day = 1; day <= daysInMonth; day++) {
+            const dayCell = document.createElement("div");
+            dayCell.classList.add("calendar-day");
+            dayCell.innerText = day;
+
+            const formattedDate = `${currentYear}-${(currentMonth + 1).toString().padStart(2, "0")}-${day.toString().padStart(2, "0")}`;
+            const classesOnThisDay = sampleClasses.filter(cls => cls.date === formattedDate);
+
+            if (classesOnThisDay.length > 0) {
+                dayCell.classList.add("has-class");
+                dayCell.addEventListener("click", () => showClassesForDay(classesOnThisDay));
+            }
+
+            calendarGrid.appendChild(dayCell);
+        }
     }
 
-    try {
-        const response = await fetch(`/enroll/${classId}`, {
-            method: 'POST',
-            headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }
+    function showClassesForDay(classes) {
+        let message = "Clases disponibles:\n";
+        classes.forEach(cls => {
+            message += `- ${cls.title}\n`;
         });
-        const data = await response.json();
-        alert(data.message || data.error);
-        window.location.reload();
-    } catch (error) {
-        console.error('Error al inscribirse en la clase:', error);
+        alert(message);
     }
-}
+
+    prevMonthBtn.addEventListener("click", () => {
+        currentMonth--;
+        if (currentMonth < 0) {
+            currentMonth = 11;
+            currentYear--;
+        }
+        loadCalendar();
+    });
+
+    nextMonthBtn.addEventListener("click", () => {
+        currentMonth++;
+        if (currentMonth > 11) {
+            currentMonth = 0;
+            currentYear++;
+        }
+        loadCalendar();
+    });
+
+    loadCalendar();
+});

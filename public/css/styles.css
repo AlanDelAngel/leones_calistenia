@@ -151,3 +151,40 @@ footer {
     background-color: #222;
     color: white;
 }
+
+/* Calendar */
+
+.class-calendar {
+    text-align: center;
+    margin: 20px auto;
+    max-width: 600px;
+}
+
+#calendar-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+#calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+}
+
+.calendar-day, .empty {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: center;
+    font-size: 14px;
+}
+
+.calendar-day.has-class {
+    background-color: #ffcc00;
+    cursor: pointer;
+}
+
+.calendar-day.has-class:hover {
+    background-color: #ffaa00;
+}
