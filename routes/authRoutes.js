@@ -4,24 +4,45 @@ const jwt = require('jsonwebtoken');
 const { body, validationResult } = require('express-validator');
 const db = require('../db');
 const { authenticate } = require('../middleware/auth');
+const { hashPassword } = require('../utils/authUtils');
+const fetch = require('node-fetch');
+require('dotenv').config();
 
 const router = express.Router();
 
 const BLACKLISTED_TOKENS = new Set();
 
-// Register a new user
 router.post('/register', async (req, res) => {
-    const { first_name, last_name, email, password, role } = req.body;
-    if (!first_name || !last_name || !email || !password || !role) {
-        return res.status(400).json({ error: "Todos los campos son obligatorios" });
+    const { first_name, last_name, email, password, role, recaptcha } = req.body;
+
+    if (!first_name || !last_name || !email || !password || !recaptcha) {
+        return res.status(400).json({ error: 'Todos los campos y reCAPTCHA son obligatorios.' });
     }
+
     try {
-        const hashedPassword = await bcrypt.hash(password, 10);
-        await db.query('INSERT INTO users (first_name, last_name, email, password_hash, role) VALUES (?, ?, ?, ?, ?)', 
+        // Verify reCAPTCHA with Google
+        const recaptchaVerify = await fetch(`https://www.google.com/recaptcha/api/siteverify`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({
+                secret: process.env.RECAPTCHA_SECRET,
+                response: recaptcha
+            })
+        });
+
+        const recaptchaData = await recaptchaVerify.json();
+        if (!recaptchaData.success) {
+            return res.status(400).json({ error: 'Verificación reCAPTCHA fallida.' });
+        }
+
+        // Hash password and insert into database
+        const hashedPassword = await hashPassword(password);
+        await db.query('INSERT INTO users (first_name, last_name, email, password_hash, role) VALUES (?, ?, ?, ?, ?)',
             [first_name, last_name, email, hashedPassword, role]);
-        res.status(201).json({ message: "Usuario registrado con éxito" });
+
+        res.json({ message: 'Registro exitoso!' });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ error: 'Error en el servidor.' });
     }
 });
 

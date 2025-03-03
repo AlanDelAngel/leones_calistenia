@@ -41,6 +41,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if (registerForm) {
         registerForm.addEventListener('submit', async (e) => {
             e.preventDefault();
+
+            const recaptchaResponse = grecaptcha.getResponse();
+            if (!recaptchaResponse) {
+                alert("Por favor, verifica que no eres un robot.");
+                return;
+            }
+
             const firstNameInput = document.getElementById('register-firstname');
             const lastNameInput = document.getElementById('register-lastname');
             const emailInput = document.getElementById('register-email');
@@ -59,7 +66,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     last_name: lastNameInput.value,
                     email: emailInput.value,
                     password: passwordInput.value,
-                    role: 'member'
+                    role: 'member',
+                    recaptcha: recaptchaResponse
                 })
             });
 
