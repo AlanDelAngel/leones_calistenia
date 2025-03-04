@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administrador - Leones Calistenia</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <img src="/resources/logo.png" alt="Logo" class="logo_image">
+            <div class="logo">Leones Calistenia</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="manager.html" class="active">Panel de Administración</a></li>
+                <li><a href="profile.html">Mi Perfil</a></li>
+                <li><a href="#" id="logout">Cerrar Sesión</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h1>Panel de Administración</h1>
+
+        <!-- Section for Managing Users -->
+        <section class="admin-section">
+            <h2>Usuarios</h2>
+            <table id="users-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Correo</th>
+                        <th>Rol</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Users will be loaded dynamically here -->
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Section for Managing Classes -->
+        <section class="admin-section">
+            <h2>Clases</h2>
+            <button id="add-class">Agregar Nueva Clase</button>
+            <table id="classes-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Fecha</th>
+                        <th>Coach</th>
+                        <th>Capacidad</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Classes will be loaded dynamically here -->
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Section for Tracking Memberships -->
+        <section class="admin-section">
+            <h2>Membresías</h2>
+            <table id="memberships-table">
+                <thead>
+                    <tr>
+                        <th>Miembro</th>
+                        <th>Paquete</th>
+                        <th>Clases Restantes</th>
+                        <th>Expira</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Memberships will be loaded dynamically here -->
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <script src="js/manager.js" defer></script>
+    <footer>
+        <p>&copy; 2025 Leones Calistenia. Todos los derechos reservados.</p>
+    </footer>
+</body>
+</html>

@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (logoutButton) {
         logoutButton.addEventListener('click', () => {
             localStorage.removeItem('token');
+            localStorage.removeItem('role'); // Ensure role is also removed
             window.location.href = '/auth.html';
         });
     }
@@ -31,7 +32,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
             if (response.ok) {
                 localStorage.setItem('token', data.token);
-                window.location.href = '/profile.html';
+                localStorage.setItem('role', data.role); // ✅ Save role in localStorage
+                
+                if (data.role === 'manager') {
+                    window.location.href = '/manager.html'; // ✅ Redirect to Manager Dashboard
+                } else {
+                    window.location.href = '/profile.html';
+                }
             } else {
                 alert(data.error);
             }

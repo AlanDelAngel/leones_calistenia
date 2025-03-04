@@ -32,3 +32,20 @@ document.addEventListener('DOMContentLoaded', () => {
     window.hideLoading = hideLoading;
     window.showError = showError;
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+    const token = localStorage.getItem("token");
+    const role = localStorage.getItem("role");
+    
+    const navLinks = document.querySelector(".nav-links");
+
+    if (role === "manager" && navLinks) {
+        // Ensure button isn't added multiple times
+        if (!document.querySelector("#manager-nav-item")) {
+            const managerNavItem = document.createElement("li");
+            managerNavItem.id = "manager-nav-item"; // Prevent duplicates
+            managerNavItem.innerHTML = '<a href="manager.html">Panel de Administración</a>';
+            navLinks.appendChild(managerNavItem);
+        }
+    }
+});

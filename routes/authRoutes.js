@@ -53,13 +53,13 @@ router.post('/login', async (req, res) => {
         return res.status(400).json({ error: 'Email y contraseña son obligatorios' });
     }
     try {
-        const [users] = await db.query('SELECT * FROM users WHERE email = ?', [email]);
+        const [users] = await db.query('SELECT id, email, password_hash, role FROM users WHERE email = ?', [email]);
         if (users.length === 0) return res.status(400).json({ error: 'Credenciales inválidas' });
         const user = users[0];
         const validPassword = await bcrypt.compare(password, user.password_hash);
         if (!validPassword) return res.status(400).json({ error: 'Credenciales inválidas' });
         const token = jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN });
-        res.json({ success: true, token });
+        res.json({ success: true, token, role: user.role }); // ✅ Now includes role in response
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

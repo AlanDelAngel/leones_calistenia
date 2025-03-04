@@ -29,6 +29,8 @@ const userRoutes = require('./routes/userRoutes');
 const classRoutes = require('./routes/classRoutes');
 const packageRoutes = require('./routes/packageRoutes');
 const enrollmentRoutes = require('./routes/enrollmentRoutes');
+const managerRoutes = require('./routes/managerRoutes');
+app.use('/manager', managerRoutes);
 app.use('/classes', classRoutes);
 app.use('/packages', packageRoutes);
 app.use('/enrollments', enrollmentRoutes);
