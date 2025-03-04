@@ -9,6 +9,35 @@ document.addEventListener('DOMContentLoaded', async () => {
     const userInfoDiv = document.getElementById('user-info');
     const packagesContainer = document.getElementById('packages-container');
 
+    async function fetchPackages() {
+        if (!token || !packagesContainer) return;
+
+        try {
+            const response = await fetch('/packages/my-packages', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+
+            if (response.ok) {
+                const packages = await response.json();
+                packagesContainer.innerHTML = packages.length > 0
+                    ? packages.map(pkg => `
+                        <div class="package-item">
+                            <p><strong>Paquete:</strong> ${pkg.package_type} clases</p>
+                            <p><strong>Clases Restantes:</strong> ${pkg.remaining_classes}</p>
+                            <p><strong>Fecha de Compra:</strong> ${new Date(pkg.purchase_date).toLocaleDateString()}</p>
+                            <p><strong>Expira el:</strong> ${new Date(pkg.expiration_date).toLocaleDateString()}</p>
+                        </div>
+                    `).join('')
+                    : '<p>No tienes paquetes activos.</p>';
+            } else {
+                packagesContainer.innerHTML = '<p>Error al obtener los paquetes.</p>';
+            }
+        } catch (error) {
+            console.error('Error al obtener paquetes:', error);
+            packagesContainer.innerHTML = '<p>Error al cargar los paquetes.</p>';
+        }
+    }
+
     // Fetch user profile
     try {
         const response = await fetch('/users/profile', {
@@ -28,68 +57,35 @@ document.addEventListener('DOMContentLoaded', async () => {
         userInfoDiv.innerHTML = '<p>Error al cargar los datos del perfil.</p>';
     }
 
-    // Fetch user packages
-    try {
-        const response = await fetch('/packages/my-packages', {
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
+    fetchPackages();
 
-        if (response.ok) {
-            const packages = await response.json();
-            if (packages.length > 0) {
-                packagesContainer.innerHTML = packages.map(pkg => `
-                    <div class="package-item">
-                        <p><strong>Paquete:</strong> ${pkg.package_type} clases</p>
-                        <p><strong>Clases Restantes:</strong> ${pkg.remaining_classes}</p>
-                        <p><strong>Fecha de Compra:</strong> ${pkg.purchase_date}</p>
-                        <p><strong>Expira el:</strong> ${pkg.expiration_date}</p>
-                    </div>
-                `).join('');
-            } else {
-                packagesContainer.innerHTML = '<p>No tienes paquetes activos.</p>';
+    // Manejar eliminación de cuenta
+    document.getElementById("delete-account")?.addEventListener("click", async () => {
+        const confirmDelete = confirm("⚠️ ¿Estás seguro de que quieres eliminar tu cuenta? Esta acción no se puede deshacer.");
+        if (!confirmDelete) return;
+
+        try {
+            const response = await fetch("/users/delete", {
+                method: "DELETE",
+                headers: { "Authorization": `Bearer ${token}` }
+            });
+
+            const data = await response.json();
+            if (!response.ok) {
+                throw new Error(data.error || "No se pudo eliminar la cuenta.");
             }
-        } else {
-            packagesContainer.innerHTML = '<p>Error al obtener los paquetes.</p>';
+
+            alert("Tu cuenta ha sido eliminada.");
+            localStorage.removeItem("token");
+            window.location.href = "auth.html";
+        } catch (error) {
+            alert("Error al eliminar la cuenta: " + error.message);
         }
-    } catch (error) {
-        console.error('Error al obtener paquetes:', error);
-        packagesContainer.innerHTML = '<p>Error al cargar los paquetes.</p>';
-    }
-});
+    });
 
-// Manejar eliminación de cuenta
-document.getElementById("delete-account")?.addEventListener("click", async () => {
-    const confirmDelete = confirm("⚠️ ¿Estás seguro de que quieres eliminar tu cuenta? Esta acción no se puede deshacer.");
-    if (!confirmDelete) return;
-
-    const token = localStorage.getItem("token");
-
-    try {
-        const response = await fetch("/users/delete", {
-            method: "DELETE",
-            headers: { "Authorization": `Bearer ${token}` }
-        });
-
-        const data = await response.json();
-
-        if (!response.ok) {
-            throw new Error(data.error || "No se pudo eliminar la cuenta.");
-        }
-
-        alert("Tu cuenta ha sido eliminada.");
-        localStorage.removeItem("token");
-        window.location.href = "auth.html";
-
-    } catch (error) {
-        alert("Error al eliminar la cuenta: " + error.message);
-    }
-});
-
-document.addEventListener('DOMContentLoaded', () => {
     const purchaseButton = document.getElementById('purchase-package');
     const packageSelect = document.getElementById('package-selection');
     const purchaseStatus = document.getElementById('purchase-status');
-    const token = localStorage.getItem('token');
 
     if (purchaseButton) {
         purchaseButton.addEventListener('click', async () => {
@@ -114,6 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (response.ok) {
                     purchaseStatus.innerText = 'Compra exitosa!';
                     purchaseStatus.style.color = 'green';
+                    fetchPackages(); // Update the package list in real-time
                 } else {
                     purchaseStatus.innerText = `Error: ${data.error}`;
                     purchaseStatus.style.color = 'red';
