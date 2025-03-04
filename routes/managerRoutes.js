@@ -17,6 +17,11 @@ router.get('/users', authenticate, authorize(['manager']), async (req, res) => {
 // Update user role
 router.put('/users/:id/role', authenticate, authorize(['manager']), async (req, res) => {
     const { role } = req.body;
+    // Restrict managers from assigning manager roles
+    if (role !== "member" && role !== "coach") {
+        return res.status(403).json({ error: "No tienes permiso para asignar este rol." });
+    }
+
     try {
         await db.query('UPDATE users SET role = ? WHERE id = ?', [role, req.params.id]);
         res.json({ success: true, message: 'Rol actualizado correctamente.' });
@@ -51,6 +56,20 @@ router.post('/classes', authenticate, authorize(['manager']), async (req, res) =
     try {
         await db.query('INSERT INTO classes (coach_id, class_date, max_capacity) VALUES (?, ?, ?)', [coach_id, class_date, max_capacity]);
         res.json({ success: true, message: 'Clase creada correctamente.' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+router.get('/memberships', authenticate, authorize(['manager']), async (req, res) => {
+    try {
+        const [memberships] = await db.query(`
+            SELECT users.first_name AS member_name, class_packages.package_type, 
+                   class_packages.remaining_classes, class_packages.expiration_date
+            FROM class_packages
+            JOIN users ON class_packages.member_id = users.id
+        `);
+        res.json(memberships);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
