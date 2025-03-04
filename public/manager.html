@@ -43,24 +43,21 @@
         </section>
 
 
-        <!-- Section for Managing Classes -->
+        <!-- Section for Adding New Classes -->
         <section class="admin-section">
-            <h2>Clases</h2>
-            <button id="add-class">Agregar Nueva Clase</button>
-            <table id="classes-table">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Fecha</th>
-                        <th>Coach</th>
-                        <th>Capacidad</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Classes will be loaded dynamically here -->
-                </tbody>
-            </table>
+            <h2>Agregar Nueva Clase</h2>
+            <form id="add-class-form">
+                <label for="class-date">Fecha y Hora:</label>
+                <input type="datetime-local" id="class-date" required>
+
+                <label for="coach-id">ID del Coach:</label>
+                <input type="number" id="coach-id" required>
+
+                <label for="max-capacity">Capacidad Máxima:</label>
+                <input type="number" id="max-capacity" required>
+
+                <button type="submit">Agregar Clase</button>
+            </form>
         </section>
 
         <!-- Section for Tracking Memberships -->
