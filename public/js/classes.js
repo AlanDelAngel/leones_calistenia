@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
             headerContainer.id = "calendar-header";
             headerContainer.classList.add("calendar-header");
     
-            const daysOfWeek = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
+            const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
             daysOfWeek.forEach(day => {
                 const dayHeader = document.createElement("div");
                 dayHeader.classList.add("calendar-day-header");

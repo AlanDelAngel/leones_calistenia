@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leones Calistenia</title>
+    <title>Leones Calistenia - Inicio</title>
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
@@ -12,22 +12,66 @@
             <script src="js/navbar_toggle.js"></script>
             <div class="logo"><img src="/resources/logo.png" alt="Logo" class="logo_image">Leones Calistenia</div>
             <ul class="nav-links">
-                <li><a href="index.html">Inicio</a></li>
+                <li><a href="index.html" class="active">Inicio</a></li>
                 <li><a href="classes.html">Clases</a></li>
                 <li><a href="profile.html">Mi Perfil</a></li>
                 <li><a href="auth.html">Iniciar Sesión</a></li>
             </ul>
         </nav>
     </header>
-    <main id="index">
-        <section class="hero">
-            <h1>Bienvenido a Leones Calistenia</h1>
-            <p>Entrena con los mejores, domina tu cuerpo y alcanza tus objetivos.</p>
-            <a href="classes.html" class="btn">Ver Clases</a>
+    
+    <main>
+        <section class="hero" id="index">
+            <div class="hero-overlay">
+                <h1>Bienvenido a Leones Calistenia</h1>
+                <p>Transforma tu cuerpo y mente con la calistenia.</p>
+                <a href="classes.html" class="btn">Ver Clases</a>
+            </div>
+        </section>
+        
+        <section class="about">
+            <h2>¿Qué es Leones Calistenia?</h2>
+            <p>Leones Calistenia es una academia dedicada al entrenamiento con el propio peso corporal. Nuestro objetivo es ayudar a personas de todos los niveles a mejorar su fuerza, movilidad y salud a través de entrenamientos funcionales.</p>
+            <div class="about-container">
+                <div class="about-item">
+                    <img src="/resources/entrenamiento.jpg" alt="Entrenamiento">
+                    <h3>Entrenamiento Funcional</h3>
+                    <p>Nuestras clases están diseñadas para mejorar la fuerza, resistencia y flexibilidad de manera equilibrada.</p>
+                </div>
+                <div class="about-item">
+                    <img src="/resources/coach.jpg" alt="Coach">
+                    <h3>Coaches Expertos</h3>
+                    <p>Contamos con entrenadores calificados que guían cada entrenamiento para garantizar seguridad y progreso.</p>
+                </div>
+                <div class="about-item">
+                    <img src="https://classpass-res.cloudinary.com/image/upload/f_auto/q_auto/pg1mt3vrvg1vhpfxu8l8.jpg" alt="Comunidad">
+                    <h3>Comunidad y Motivación</h3>
+                    <p>Únete a nuestra comunidad de atletas y disfruta de un ambiente de superación y apoyo mutuo.</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="cta">
+            <h2>Empieza Hoy</h2>
+            <p>Inscríbete en una clase gratuita y descubre el poder de la calistenia.</p>
+            <a href="auth.html" class="btn">Regístrate Ahora</a>
         </section>
     </main>
-    <script src="js/main.js" defer></script>
-    <footer class="index_footer">
+    
+    <footer>
+        <p>Follow us in our socials!!</p>
+        <br/>
+        <div class="social-media-logos">
+            <!-- Instagram Logo -->
+            <a href="https://www.instagram.com/alan__delangel/profilecard/?igsh=eG8xdDI1bDI3Zml6" target="_blank">
+              <img src="/resources/insta.png" alt="Instagram" class="social-logo">
+            </a>
+            <!-- Twitter Logo -->
+            <a href="https://x.com/duolingo?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor" target="_blank">
+              <img src="/resources/twitter.png" alt="Twitter" class="social-logo">
+            </a>
+          </div>
+        <br/>
         <p>&copy; 2025 Leones Calistenia. Todos los derechos reservados.</p>
     </footer>
 </body>
