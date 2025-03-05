@@ -2,6 +2,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const loginForm = document.getElementById('login-form');
     const registerForm = document.getElementById('register-form');
     const logoutButton = document.getElementById('logout-button');
+    const openRegisterBtn = document.getElementById('open-register');
+    const registerModal = document.getElementById('register-modal');
+    const closeBtn = document.querySelector('.close-btn');
 
     // Logout functionality
     if (logoutButton) {
@@ -45,6 +48,25 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Open Register Modal
+    openRegisterBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        registerModal.style.display = 'flex';
+    });
+
+    // Close Modal
+    closeBtn.addEventListener('click', () => {
+        registerModal.style.display = 'none';
+    });
+
+    // Close modal when clicking outside the form
+    window.addEventListener('click', (e) => {
+        if (e.target === registerModal) {
+            registerModal.style.display = 'none';
+        }
+    });
+
+
     if (registerForm) {
         registerForm.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -81,7 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
             if (response.ok) {
                 alert('Registro exitoso! Ahora puedes iniciar sesión.');
-                window.location.href = '/auth.html';
+                registerModal.style.display = 'none'; // Auto-close modal
             } else {
                 alert(data.error);
             }

@@ -26,30 +26,33 @@
             <form id="login-form">
                 <input type="email" id="login-email" placeholder="Correo Electrónico" required>
                 <input type="password" id="login-password" placeholder="Contraseña" required>
+                <br/>
                 <button type="submit">Ingresar</button>
             </form>
-            <p>¿No tienes una cuenta? <a href="#" id="show-register">Regístrate aquí</a></p>
+            <br/>
+            <p>¿No tienes una cuenta? <a href="#" id="open-register">Regístrate aquí</a></p>
         </section>
-        <section class="auth-container hidden" id="register-section">
-            <h1>Registro</h1>
-            <form id="register-form">
-                <input type="text" id="register-firstname" placeholder="Nombre" required>
-                <input type="text" id="register-lastname" placeholder="Apellido" required>
-                <input type="email" id="register-email" placeholder="Correo Electrónico" required>
-                <input type="password" id="register-password" placeholder="Contraseña" required>       
-                <br/>                        
-                <!-- Google reCAPTCHA -->
-                <div class="g-recaptcha" data-sitekey="6Lf0W-gqAAAAAMRwCjarWKJPxOuF14ZkwECn29yK"></div>
-                <br/>                
-                <button type="submit">Registrarse</button>
-            </form>
-            <p>¿Ya tienes una cuenta? <a href="#" id="show-login">Inicia sesión aquí</a></p>
-        </section>
+
+        <!-- REGISTRATION MODAL (Hidden by Default) -->
+        <div id="register-modal" class="modal">
+            <div class="modal-content">
+                <span class="close-btn">&times;</span>
+                <h2>Registro</h2>
+                <form id="register-form">
+                    <input type="text" id="register-firstname" placeholder="Nombre" required>
+                    <input type="text" id="register-lastname" placeholder="Apellido" required>
+                    <input type="email" id="register-email" placeholder="Correo Electrónico" required>
+                    <input type="password" id="register-password" placeholder="Contraseña" required>
+                    <!-- Google reCAPTCHA -->
+                     <br/>
+                    <div class="g-recaptcha" data-sitekey="6Lf0W-gqAAAAAMRwCjarWKJPxOuF14ZkwECn29yK"></div>
+                    <br/>
+                    <button type="submit">Registrarse</button>
+                </form>
+            </div>
+        </div>
     </main>
     <script src="js/auth.js" defer></script>
     <script src="js/main.js" defer></script>
-    <footer>
-        <p>&copy; 2025 Leones Calistenia. Todos los derechos reservados.</p>
-    </footer>
 </body>
 </html>
