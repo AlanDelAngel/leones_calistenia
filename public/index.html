@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Leones Calistenia - Inicio</title>
     <link rel="stylesheet" href="css/styles.css">
+    <script src="js/chat.js" defer></script>
 </head>
 <body>
     <header>
@@ -57,6 +58,18 @@
             <a href="auth.html" class="btn">Regístrate Ahora</a>
         </section>
     </main>
+
+    <!-- Floating Chatbot Button -->
+    <div id="chat-container">
+        <button id="chat-toggle">💬 Ayuda</button>
+        <div id="chat-window">
+            <div id="chat-header">🤖 Asistente de Ayuda <span id="chat-close">✖</span></div>
+            <div id="chat-box"></div>
+            <input type="text" id="chat-input" placeholder="Escribe tu pregunta...">
+            <button id="send-chat">Enviar</button>
+        </div>
+    </div>
+
     
     <footer>
         <p>Follow us in our socials!!</p>

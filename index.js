@@ -30,6 +30,8 @@ const classRoutes = require('./routes/classRoutes');
 const packageRoutes = require('./routes/packageRoutes');
 const enrollmentRoutes = require('./routes/enrollmentRoutes');
 const managerRoutes = require('./routes/managerRoutes');
+const chatRoutes = require("./routes/chatRoutes");
+app.use("/chat", chatRoutes);
 app.use('/manager', managerRoutes);
 app.use('/classes', classRoutes);
 app.use('/packages', packageRoutes);
