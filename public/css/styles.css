@@ -19,28 +19,31 @@ main {
 /* Navbar */
 .navbar {
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: center;
-    padding: 15px 20px;
+    padding: 12px 20px;
     background-color: #222;
     color: white;
-    overflow: hidden;
+    width: 100%;
+    height: 60px;
     position: fixed;
     top: 0;
-    width: 100%;
+    left: 0;
     z-index: 1100;
 }
 
-.navbar .logo {
-    font-size: 1.5em;
+.logo {
+    display: flex;
+    align-items: center;
+    font-size: 20px;
     font-weight: bold;
-    margin-right: auto;
+    gap: 10px;
 }
 
 .navbar .logo_image {
-    width: 35px; /* Adjust size of the logo */
-    height: auto; /* Maintain aspect ratio */
-    margin-right: 15px;
+    width: 40px;
+    height: auto;
+    margin-right: 5px;
 }
 
 .nav-links {
@@ -56,21 +59,75 @@ main {
     color: white;
     text-decoration: none;
     font-weight: bold;
+    padding: 10px;
+    transition: color 0.3s, background-color 0.3s;
+}
+
+.nav-links a:hover {
+    background-color: rgba(255, 102, 0, 0.2);
+    border-radius: 5px;
 }
 
 .nav-links .active {
     border-bottom: 2px solid #ff6600;
 }
 
+/* Mobile Navbar */
+.menu-toggle {
+    display: none; /* Hidden by default */
+    font-size: 28px;
+    padding: 10px 15px;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .menu-toggle {
+        display: block; /* Show only on mobile */
+    }
+
+    .nav-links {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        background-color: #222;
+        width: 220px;
+        padding: 10px 0;
+        box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+        border-radius: 5px;
+    }
+
+    .nav-links.active {
+        display: flex;
+    }
+
+    .nav-links li {
+        padding: 12px 15px;
+    }
+
+    .nav-links a {
+        font-size: 16px;
+        padding: 10px 15px;
+    }
+}
+
 /* Hero Section */
+
+#index{
+    margin-top: 60px;
+}
+
 .hero {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    margin-top: -30px;
-    background-image: url('/resources/background.JPG');
+    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('/resources/background.JPG');
     background-size: cover;
     background-position: center;
     color: white;
@@ -83,13 +140,40 @@ main {
 
 .btn {
     display: inline-block;
-    margin-top: 15px;
-    padding: 10px 20px;
+    padding: 12px 20px;
     background-color: #ff6600;
     color: white;
     text-decoration: none;
     font-weight: bold;
     border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: #ff4400;
+}
+
+/* Footer */
+footer {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #222;
+    color: white;
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+    .hero h1 {
+        font-size: 2em;
+    }
+
+    .btn {
+        padding: 10px 15px;
+    }
+
+    footer {
+        font-size: 14px;
+    }
 }
 
 .delete-btn {
@@ -130,23 +214,6 @@ input, select {
     width: 80%;
     border: 1px solid #ccc;
     border-radius: 5px;
-}
-
-button {
-    padding: 10px 20px;
-    background-color: #ff6600;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-/* Footer */
-footer {
-    margin-top: 20px;
-    padding: 15px;
-    background-color: #222;
-    color: white;
 }
 
 .index_footer {
@@ -329,11 +396,24 @@ th {
 }
 
 button {
+    display: inline-block;
     padding: 8px 12px;
-    border: none;
-    cursor: pointer;
     font-size: 14px;
+    background-color: #ff6600;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    border: none;
     border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    opacity: 0.8;
+}
+
+button:focus {
+    color: black;
 }
 
 .edit-btn {
@@ -344,8 +424,4 @@ button {
 .delete-btn {
     background: #f44336;
     color: white;
-}
-
-button:hover {
-    opacity: 0.8;
 }

@@ -9,11 +9,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Sample data for visualization (replace with API data)
     const sampleClasses = [
-        { id: 1, date: "2025-03-05", title: "Calistenia Básica, Coach: coach c, cupo disponible: 15" },
-        { id: 2, date: "2025-03-10", title: "Entrenamiento Avanzado, Coach: coach c, cupo disponible: 15" },
-        { id: 3, date: "2025-03-15", title: "Flexibilidad y Movilidad, Coach: coach c, cupo disponible: 15" },
-        { id: 4, date: "2025-03-20", title: "Rutina Full Body, Coach: coach c, cupo disponible: 15" },
-        { id: 5, date: "2025-03-25", title: "Ejercicios de Resistencia, Coach: coach c, cupo disponible: 15" },
+        { id: 1, date: "2025-03-05", title: "Calistenia Básica, Coach: Coach master, lugares disponible: 15" },
+        { id: 2, date: "2025-03-10", title: "Entrenamiento Avanzado, Coach: Coach master, lugares disponible: 15" },
+        { id: 3, date: "2025-03-15", title: "Flexibilidad y Movilidad, Coach: Coach master, lugares disponible: 15" },
+        { id: 4, date: "2025-03-20", title: "Rutina Full Body, Coach: Coach master, lugares disponible: 15" },
+        { id: 5, date: "2025-03-25", title: "Ejercicios de Resistencia, Coach: Coach master, lugares disponible: 15" },
     ];
 
     function loadCalendar() {
