@@ -39,6 +39,8 @@ main {
     font-size: 20px;
     font-weight: bold;
     gap: 10px;
+    text-decoration: none;
+    color: white;
 }
 
 .navbar .logo_image {
